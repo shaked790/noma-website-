@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
+import { Reveal } from '@/components/Reveal'
 import { Section } from '@/components/Section'
 import { StudioAboutModal } from '@/components/home/StudioAboutModal'
 import { studio } from '@/content/home'
@@ -54,11 +55,15 @@ export function StudioSection() {
     <Section id="studio" space="md" tone="surface">
       <Container size="wide">
         <div className="flex flex-col gap-16 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-10">
-          <div className="order-1 min-w-0 reveal lg:order-none lg:col-span-3 lg:col-start-4 lg:row-start-1">
-            <p className="text-eyebrow text-ink-muted">{studio.eyebrow}</p>
-            <h2 className="mt-4 whitespace-pre-line text-display-lg">{studio.headline}</h2>
-            <p className="mt-6 text-body text-ink-secondary">{splitNoma(studio.body)}</p>
-            <p className="mt-8">
+          <Reveal className="order-1 min-w-0 lg:order-none lg:col-span-3 lg:col-start-4 lg:row-start-1">
+            <p className="reveal-view text-eyebrow text-ink-muted">{studio.eyebrow}</p>
+            <h2 className="reveal-view mt-4 whitespace-pre-line text-display-lg [--reveal-delay:var(--duration-stagger)]">
+              {studio.headline}
+            </h2>
+            <p className="reveal-view mt-6 text-body text-ink-secondary [--reveal-delay:calc(var(--duration-stagger)*2)]">
+              {splitNoma(studio.body)}
+            </p>
+            <p className="reveal-view mt-8 [--reveal-delay:calc(var(--duration-stagger)*3)]">
               <Button
                 id={TRIGGER_ID}
                 type="button"
@@ -68,14 +73,17 @@ export function StudioSection() {
                 onClick={() => setAboutOpen(true)}
               >
                 {cta.label}
-                <span aria-hidden="true" className="ms-2">
+                <span aria-hidden="true" className="motion-arrow ms-2">
                   ←
                 </span>
               </Button>
             </p>
-          </div>
+          </Reveal>
 
-          <figure className="reveal order-2 min-w-0 overflow-hidden lg:order-none lg:col-span-3 lg:col-start-7 lg:row-start-1">
+          <Reveal
+            as="figure"
+            className="reveal-image order-2 min-w-0 overflow-hidden lg:order-none lg:col-span-3 lg:col-start-7 lg:row-start-1"
+          >
             <img
               src={portrait.src}
               width={portrait.width}
@@ -85,13 +93,16 @@ export function StudioSection() {
               decoding="async"
               className="media-cover aspect-[4/5] object-[center_18%]"
             />
-          </figure>
+          </Reveal>
 
-          <ul className="reveal order-3 min-w-0 lg:order-none lg:col-span-3 lg:col-start-1 lg:row-start-1">
+          <Reveal
+            as="ul"
+            className="reveal-view order-3 min-w-0 lg:order-none lg:col-span-3 lg:col-start-1 lg:row-start-1"
+          >
             {principles.map((item) => (
               <li
                 key={item.title}
-                className="hairline-b border-border py-5 first:pt-0 last:border-b-0 last:pb-0"
+                className="group motion-rule hairline-b border-border py-5 first:pt-0 last:border-b-0 last:pb-0"
               >
                 <div className="flex items-start gap-4">
                   <img
@@ -101,7 +112,7 @@ export function StudioSection() {
                     height={80}
                     loading="lazy"
                     decoding="async"
-                    className="size-16 shrink-0 object-cover"
+                    className="motion-thumb size-16 shrink-0 object-cover"
                   />
                   <div className="min-w-0">
                     <p className="text-body-sm">{item.title}</p>
@@ -110,9 +121,12 @@ export function StudioSection() {
                 </div>
               </li>
             ))}
-          </ul>
+          </Reveal>
 
-          <blockquote className="reveal order-4 min-w-0 lg:order-none lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:self-center">
+          <Reveal
+            as="blockquote"
+            className="reveal-view order-4 min-w-0 lg:order-none lg:col-span-3 lg:col-start-10 lg:row-start-1 lg:self-center"
+          >
             <span
               aria-hidden="true"
               className="block font-display text-display-xl leading-none text-ink-muted"
@@ -125,12 +139,9 @@ export function StudioSection() {
                 <cite className="block text-body-sm not-italic">{attribution.name}</cite>
                 <p className="mt-1 text-caption text-ink-muted">{attribution.role}</p>
               </div>
-              <span
-                aria-hidden="true"
-                className="h-px w-8 shrink-0 bg-border"
-              />
+              <span aria-hidden="true" className="h-px w-8 shrink-0 bg-border" />
             </footer>
-          </blockquote>
+          </Reveal>
         </div>
       </Container>
 

@@ -72,9 +72,16 @@
   background-color: var(--color-surface-raised);
   color: var(--color-ink);
   appearance: auto;
+  transition-property: border-color;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-out);
 
   &::placeholder {
     color: var(--color-ink-muted);
+  }
+
+  &:focus-visible {
+    border-color: var(--color-ink-muted);
   }
 }
 
@@ -133,6 +140,214 @@
 
 @utility reveal-media {
   animation: noma-reveal-media var(--duration-slow) var(--ease-editorial) both;
+}
+
+/*
+ * Viewport-triggered rise. Opacity stays 1 until .is-inview (or a parent
+ * .is-inview) so reduced-motion and a missing observer never leave a blank hole.
+ */
+@utility reveal-view {
+  --reveal-rise: calc(var(--spacing) * 5);
+
+  @media (prefers-reduced-motion: no-preference) {
+    opacity: 0;
+
+    &.is-inview,
+    .is-inview & {
+      animation: noma-reveal var(--duration-reveal) var(--ease-editorial) both;
+      animation-delay: var(--reveal-delay, var(--duration-instant));
+    }
+  }
+}
+
+@keyframes noma-reveal-image {
+  from {
+    opacity: 0;
+    clip-path: inset(8% 0 0 0);
+  }
+
+  to {
+    opacity: 1;
+    clip-path: inset(0);
+  }
+}
+
+@utility reveal-image {
+  @media (prefers-reduced-motion: no-preference) {
+    opacity: 0;
+
+    &.is-inview,
+    .is-inview & {
+      animation: noma-reveal-image var(--duration-reveal) var(--ease-editorial) both;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-arrow,
+  .motion-arrow-sm,
+  .motion-zoom,
+  .motion-scale,
+  .motion-thumb,
+  .group:hover .motion-arrow,
+  .group:hover .motion-arrow-sm,
+  .group:hover .motion-zoom,
+  .group:hover .motion-scale,
+  .group:hover .motion-thumb,
+  .group:focus-visible .motion-arrow,
+  .group:focus-visible .motion-arrow-sm,
+  .group:focus-visible .motion-zoom,
+  .group:focus-visible .motion-scale,
+  .group:focus-visible .motion-thumb {
+    transform: none !important;
+    transition-duration: 0ms !important;
+  }
+}
+
+@utility motion-arrow {
+  display: inline-block;
+  transition-property: transform;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-out);
+
+  @media (hover: hover) and (pointer: fine) {
+    .group:hover & {
+      transform: translateX(calc(-1 * var(--motion-nudge)));
+    }
+  }
+
+  .group:focus-visible & {
+    transform: translateX(calc(-1 * var(--motion-nudge)));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition-duration: 0ms;
+
+    .group:hover &,
+    .group:focus-visible & {
+      transform: none;
+      transition-duration: 0ms;
+    }
+  }
+}
+
+@utility motion-arrow-sm {
+  display: inline-block;
+  transition-property: transform;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-out);
+
+  @media (hover: hover) and (pointer: fine) {
+    .group:hover & {
+      transform: translateX(calc(-1 * var(--motion-nudge-sm)));
+    }
+  }
+
+  .group:focus-visible & {
+    transform: translateX(calc(-1 * var(--motion-nudge-sm)));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition-duration: 0ms;
+
+    .group:hover &,
+    .group:focus-visible & {
+      transform: none;
+      transition-duration: 0ms;
+    }
+  }
+}
+
+@utility motion-zoom {
+  transition-property: transform;
+  transition-duration: var(--duration-linger);
+  transition-timing-function: var(--ease-out);
+
+  @media (hover: hover) and (pointer: fine) {
+    .group:hover & {
+      transform: scale(1.03);
+    }
+  }
+
+  .group:focus-visible & {
+    transform: scale(1.03);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition-duration: 0ms;
+
+    .group:hover &,
+    .group:focus-visible & {
+      transform: none;
+      transition-duration: 0ms;
+    }
+  }
+}
+
+@utility motion-scale {
+  display: inline-block;
+  transition-property: transform;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-out);
+
+  @media (hover: hover) and (pointer: fine) {
+    .group:hover & {
+      transform: scale(1.04);
+    }
+  }
+
+  .group:focus-visible & {
+    transform: scale(1.04);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition-duration: 0ms;
+
+    .group:hover &,
+    .group:focus-visible & {
+      transform: none;
+      transition-duration: 0ms;
+    }
+  }
+}
+
+@utility motion-thumb {
+  transition-property: transform;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-out);
+
+  @media (hover: hover) and (pointer: fine) {
+    .group:hover & {
+      transform: translateX(var(--motion-nudge-sm));
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transform: none;
+    transition-duration: 0ms;
+
+    .group:hover & {
+      transform: none;
+      transition-duration: 0ms;
+    }
+  }
+}
+
+@utility motion-rule {
+  transition-property: border-color;
+  transition-duration: var(--duration-base);
+  transition-timing-function: var(--ease-out);
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover,
+    &.group:hover {
+      border-color: var(--color-ink-muted);
+    }
+  }
 }
 
 /*

@@ -21,15 +21,12 @@ export function NextProject({ project }: { project: Project }) {
             loading="lazy"
             decoding="async"
             sizes="(min-width: 64rem) 80vw, 100vw"
-            className="aspect-[16/9] w-full object-cover transition-transform duration-(--duration-slow) ease-out group-hover:scale-[1.03] group-focus-visible:scale-[1.03]"
+            className="motion-zoom aspect-[16/9] w-full object-cover"
           />
         </figure>
         <div className="mt-5 flex items-start justify-between gap-4">
           <h2 className="text-display-sm">{project.title}</h2>
-          <span
-            aria-hidden="true"
-            className="mt-1 shrink-0 text-body-sm transition-transform duration-(--duration-fast) ease-out group-hover:-translate-x-1 group-focus-visible:-translate-x-1"
-          >
+          <span aria-hidden="true" className="motion-arrow mt-1 shrink-0 text-body-sm">
             ←
           </span>
         </div>

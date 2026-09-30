@@ -109,7 +109,7 @@ export function Hero() {
       <div className="relative flex min-h-svh flex-col justify-end lg:justify-center">
         <Container
           size="wide"
-          className="flex justify-start pb-(--section-y-sm) pt-[clamp(5.5rem,12vh,7rem)] lg:pb-(--section-y-sm) lg:pt-[clamp(5.5rem,12vh,7.5rem)]"
+          className="flex justify-start pb-[calc(var(--section-y-sm)+6vh)] pt-[clamp(5.5rem,12vh,7rem)] lg:pb-(--section-y-sm) lg:pt-[clamp(5.5rem,12vh,7.5rem)]"
         >
           <div className="w-full max-w-[calc(var(--spacing)*112)]">
             <p className="reveal text-eyebrow" style={quietInverse}>

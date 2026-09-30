@@ -180,7 +180,7 @@ export function StudioAboutModal({
           <p className="mt-12">
             <Button type="button" variant="solid" onClick={onContact}>
               {cta.label}
-              <span aria-hidden="true" className="ms-2">
+              <span aria-hidden="true" className="motion-arrow ms-2">
                 ←
               </span>
             </Button>

@@ -1,5 +1,6 @@
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
+import { Reveal } from '@/components/Reveal'
 import { Section } from '@/components/Section'
 import { process } from '@/content/home'
 import { cn } from '@/lib/cn'
@@ -60,13 +61,20 @@ export function ProcessSection() {
     <Section id="process" space="md" tone="surface" className="hairline-t border-border">
       <Container size="wide">
         <div className="flex flex-col gap-10 lg:grid lg:grid-cols-12 lg:items-stretch lg:gap-x-12">
-          <div className="order-1 min-w-0 reveal lg:col-span-8 lg:col-start-1 lg:row-start-1">
-            <p className="text-eyebrow text-ink-muted">{eyebrow}</p>
-            <h2 className="mt-4 text-display-lg">{headline}</h2>
-            <p className="mt-6 max-w-measure text-body text-ink-secondary">{body}</p>
-          </div>
+          <Reveal className="order-1 min-w-0 lg:col-span-8 lg:col-start-1 lg:row-start-1">
+            <p className="reveal-view text-eyebrow text-ink-muted">{eyebrow}</p>
+            <h2 className="reveal-view mt-4 text-display-lg [--reveal-delay:var(--duration-stagger)]">
+              {headline}
+            </h2>
+            <p className="reveal-view mt-6 max-w-measure text-body text-ink-secondary [--reveal-delay:calc(var(--duration-stagger)*2)]">
+              {body}
+            </p>
+          </Reveal>
 
-          <figure className="reveal-media order-2 min-w-0 overflow-hidden lg:col-span-3 lg:col-start-10 lg:row-span-2 lg:row-start-1">
+          <Reveal
+            as="figure"
+            className="reveal-image order-2 min-w-0 overflow-hidden lg:col-span-3 lg:col-start-10 lg:row-span-2 lg:row-start-1"
+          >
             <img
               src={image.src}
               alt={image.alt}
@@ -76,36 +84,36 @@ export function ProcessSection() {
               decoding="async"
               className="aspect-[16/10] w-full object-cover object-[30%_80%] lg:h-full lg:min-h-80 lg:aspect-auto"
             />
-          </figure>
+          </Reveal>
 
           <div className="order-3 min-w-0 lg:col-span-8 lg:col-start-1 lg:row-start-2">
-            <ol className="reveal grid grid-cols-1 lg:grid-cols-4">
+            <Reveal as="ol" className="reveal-view grid grid-cols-1 lg:grid-cols-4">
               {steps.map((step, index) => (
                 <li
                   key={step.number}
                   className={cn(
-                    'hairline-b border-border py-8 last:border-b-0 lg:border-b-0 lg:py-0',
+                    'group motion-rule hairline-b border-border py-8 last:border-b-0 lg:border-b-0 lg:py-0',
                     index > 0 &&
                       'lg:border-s lg:border-border lg:ps-7 lg:[border-inline-start-width:var(--border-hairline)]',
                     index < steps.length - 1 && 'lg:pe-7',
                   )}
                 >
                   <p className="text-caption text-ink-muted">
-                    <span className="ltr-isolate">{step.number}</span>
+                    <span className="motion-scale ltr-isolate">{step.number}</span>
                   </p>
-                  <div className="mt-4">
+                  <div className="motion-arrow-sm mt-4">
                     <ProcessIcon name={step.icon} />
                   </div>
                   <h3 className="mt-5 text-body-sm">{step.title}</h3>
                   <p className="mt-2 text-caption text-ink-muted">{step.description}</p>
                 </li>
               ))}
-            </ol>
+            </Reveal>
 
             <div className="mt-12 flex flex-wrap items-end justify-between gap-8 lg:mt-16">
               <Button href={cta.href} variant="outline">
                 {cta.label}
-                <span aria-hidden="true" className="ms-2">
+                <span aria-hidden="true" className="motion-arrow ms-2">
                   ←
                 </span>
               </Button>

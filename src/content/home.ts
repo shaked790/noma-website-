@@ -3,7 +3,6 @@ import principleLife from '@/assets/principle-life.png'
 import principlePlan from '@/assets/principle-plan.png'
 import principleMaterial from '@/assets/principle-material.png'
 import principleTime from '@/assets/principle-time.png'
-import contactInterior from '@/assets/projects/beit-herzliya/herzliya-wide-living.png'
 import { getProjectBySlug } from '@/content/projects'
 
 export type HeroSlide = {
@@ -218,25 +217,17 @@ export const process = {
 } as const
 
 /*
- * Contact / lead-qualification section. Photograph is an existing Herzliya
- * still, unused on the homepage. Contact values stay in navigation.ts.
+ * Contact / lead-qualification section. Contact values stay in navigation.ts.
  */
 export const contact = {
   eyebrow: 'צור קשר',
   headline: 'בואו נדבר על הפרויקט שלכם.',
   body: 'ספרו לנו על הבית ועל איך אתם חיים בו. אנחנו מקשיבים, מבינים את הצרכים, ובודקים יחד איך אפשר ליצור חלל שמרגיש נכון עבורכם.',
-  aside: ['SPACES', 'THAT', 'BELONG'] as const,
   submitLabel: 'בואו נדבר על הפרויקט',
   whatsappLabel: 'או כתבו לנו ב-WhatsApp',
   whatsappMessage:
     'שלום אורי, הגעתי לאתר של NOMA ואשמח לשמוע על תהליך עיצוב פנים עבור הפרויקט שלי.',
   note: 'אפשר לכתוב כאן או לפנות בוואטסאפ — בלי התחייבות.',
-  image: {
-    src: contactInterior,
-    width: 1920,
-    height: 1080,
-    alt: 'פינת אוכל וסלון בבית בהרצליה: שולחן עץ, אי שיש ואור יום.',
-  },
   fields: {
     name: { id: 'lead-name', name: 'name', label: 'שם מלא', autoComplete: 'name' },
     phone: { id: 'lead-phone', name: 'phone', label: 'טלפון', autoComplete: 'tel' },

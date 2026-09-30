@@ -15,10 +15,10 @@ type ButtonSize = 'sm' | 'md' | 'lg'
  * breakpoint instead of passing `hidden lg:inline-flex`.
  */
 const controlBase =
-  'inline-flex items-center justify-center gap-2 rounded-sm text-center align-middle min-h-(--tap-target-min) transition-[color,background-color,border-color] duration-(--duration-fast) ease-out disabled:pointer-events-none disabled:opacity-50'
+  'group inline-flex items-center justify-center gap-2 rounded-sm text-center align-middle min-h-(--tap-target-min) transition-[color,background-color,border-color] duration-(--duration-fast) ease-out disabled:pointer-events-none disabled:opacity-50'
 
 const linkBase =
-  'inline text-start link-underline transition-colors duration-(--duration-fast) ease-out disabled:pointer-events-none disabled:opacity-50'
+  'group inline text-start link-underline transition-colors duration-(--duration-fast) ease-out disabled:pointer-events-none disabled:opacity-50'
 
 const variantClass: Record<ButtonVariant, string> = {
   solid:

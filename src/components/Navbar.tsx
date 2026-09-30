@@ -1,5 +1,5 @@
 import type { KeyboardEvent } from 'react'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Button } from './Button'
 import { Container } from './Container'
 import {
@@ -40,8 +40,21 @@ export function Navbar({
   className,
 }: NavbarProps) {
   const [open, setOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const triggerRef = useRef<HTMLButtonElement>(null)
   const onMedia = overlay && !open
+
+  useEffect(() => {
+    if (overlay) return
+
+    function onScroll() {
+      setScrolled(window.scrollY > 8)
+    }
+
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [overlay])
 
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === 'Escape' && open) {
@@ -57,7 +70,10 @@ export function Navbar({
         'z-40',
         overlay
           ? 'absolute start-0 end-0 top-0 w-full'
-          : 'sticky top-0 hairline-b border-border bg-surface',
+          : cn(
+              'sticky top-0 hairline-b bg-surface transition-[background-color,border-color] duration-(--duration-base) ease-out',
+              scrolled ? 'border-border-strong bg-surface-raised' : 'border-border',
+            ),
         overlay && !open && 'text-ink-inverse',
         overlay && open && 'bg-surface text-ink',
         className,

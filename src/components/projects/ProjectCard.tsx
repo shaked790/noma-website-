@@ -25,7 +25,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
           loading="lazy"
           decoding="async"
           sizes="(min-width: 64rem) 30vw, 100vw"
-          className="aspect-[16/10] w-full object-cover transition-transform duration-(--duration-slow) ease-out group-hover:scale-[1.03] group-focus-visible:scale-[1.03]"
+          className="motion-zoom aspect-[16/10] w-full object-cover"
         />
       </figure>
 
@@ -34,10 +34,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
           <h3 className="text-display-sm">{project.title}</h3>
           <p className="mt-2 text-body-sm text-ink-secondary">{project.shortDescription}</p>
         </div>
-        <span
-          aria-hidden="true"
-          className="mt-1 shrink-0 text-body-sm transition-transform duration-(--duration-fast) ease-out group-hover:-translate-x-1 group-focus-visible:-translate-x-1"
-        >
+        <span aria-hidden="true" className="motion-arrow mt-1 shrink-0 text-body-sm">
           ←
         </span>
       </div>

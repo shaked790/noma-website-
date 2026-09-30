@@ -146,6 +146,11 @@
   --duration-base: 260ms;
   --duration-slow: 480ms;
   --duration-cinematic: 1.2s;
+  --duration-linger: 600ms;
+  --duration-reveal: 800ms;
+  --duration-stagger: 80ms;
+  --motion-nudge: 0.25rem;
+  --motion-nudge-sm: 0.1875rem;
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
 

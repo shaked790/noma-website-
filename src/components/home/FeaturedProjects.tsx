@@ -1,5 +1,6 @@
 import { Link } from 'react-router'
 import { Container } from '@/components/Container'
+import { Reveal } from '@/components/Reveal'
 import { Section } from '@/components/Section'
 import { ProjectCard } from '@/components/projects/ProjectCard'
 import { featuredProjectsIntro, projects } from '@/content/projects'
@@ -10,26 +11,26 @@ export function FeaturedProjects() {
   return (
     <Section id="projects" space="md" tone="surface" className="hairline-t border-border">
       <Container size="wide">
-        <div className="flex items-end justify-between gap-6">
-          <h2 className="reveal text-display-md">{heading}</h2>
+        <Reveal className="flex items-end justify-between gap-6">
+          <h2 className="reveal-view text-display-md">{heading}</h2>
           <Link
             to={allHref}
-            className="reveal inline-flex min-h-(--tap-target-min) shrink-0 items-center text-body-sm text-ink-secondary transition-colors duration-(--duration-fast) ease-out hover:text-accent"
+            className="group reveal-view inline-flex min-h-(--tap-target-min) shrink-0 items-center text-body-sm text-ink-secondary transition-colors duration-(--duration-fast) ease-out hover:text-accent [--reveal-delay:var(--duration-stagger)]"
           >
             {allLabel}
-            <span aria-hidden="true" className="ms-2">
+            <span aria-hidden="true" className="motion-arrow ms-2">
               ←
             </span>
           </Link>
-        </div>
+        </Reveal>
 
-        <ul className="mt-10 grid grid-cols-1 gap-12 md:gap-14 lg:mt-14 lg:grid-cols-3 lg:gap-8">
+        <Reveal as="ul" className="reveal-view mt-10 grid grid-cols-1 gap-12 md:gap-14 lg:mt-14 lg:grid-cols-3 lg:gap-8">
           {projects.map((project) => (
-            <li key={project.slug} className="reveal min-w-0">
+            <li key={project.slug} className="min-w-0">
               <ProjectCard project={project} />
             </li>
           ))}
-        </ul>
+        </Reveal>
 
         <ol
           dir="ltr"
