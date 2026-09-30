@@ -1,0 +1,165 @@
+/*
+ * NOMA design tokens.
+ *
+ * This is the only file in the codebase where a literal value is declared.
+ * base.css, utilities.css and every component reference these tokens through
+ * var() or the Tailwind utilities generated from them.
+ *
+ * The `*: initial` resets below remove Tailwind's default palette and scales,
+ * so off-system values such as `bg-red-500`, `text-6xl` or `rounded-2xl` do not
+ * exist. Adding a value to the system means adding it here.
+ */
+
+/*
+ * `static` keeps every token on :root. Without it Tailwind emits only the ones
+ * it sees used, so a token referenced later through var() — in an inline style,
+ * or as an assignment target like the reduced-motion overrides — would silently
+ * resolve to nothing.
+ */
+@theme static {
+  --color-*: initial;
+  --font-*: initial;
+  --font-weight-*: initial;
+  --text-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --container-*: initial;
+
+  /* Palette — ivory, stone, charcoal, olive. Nothing else. */
+  --color-ivory-50: #fbf9f5;
+  --color-ivory-100: #f5f1ea;
+  --color-stone-200: #eae4da;
+  --color-stone-300: #dbd4c7;
+  --color-stone-400: #bfb6a6;
+  --color-charcoal-500: #6b6659;
+  --color-charcoal-700: #3a3833;
+  --color-charcoal-900: #1c1b18;
+  --color-olive-600: #5a6650;
+  --color-olive-700: #46503c;
+  --color-olive-800: #333b2b;
+  --color-white: #ffffff;
+
+  /* Semantic aliases — components reference these, never the palette above. */
+  --color-surface: var(--color-ivory-100);
+  --color-surface-raised: var(--color-ivory-50);
+  --color-surface-muted: var(--color-stone-200);
+  --color-surface-contrast: var(--color-charcoal-900);
+  --color-ink: var(--color-charcoal-900);
+  --color-ink-secondary: var(--color-charcoal-700);
+  --color-ink-muted: var(--color-charcoal-500);
+  --color-ink-inverse: var(--color-ivory-100);
+  --color-accent: var(--color-olive-700);
+  --color-accent-strong: var(--color-olive-800);
+  --color-accent-soft: var(--color-olive-600);
+  --color-border: var(--color-stone-300);
+  --color-border-strong: var(--color-stone-400);
+  --color-focus: var(--color-olive-700);
+
+  /* Typeface */
+  --font-display: 'Frank Ruhl Libre Variable', 'Frank Ruhl Libre', serif;
+  --font-body: 'Assistant Variable', 'Assistant', system-ui, sans-serif;
+
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  /*
+   * Type scale. Display steps are fluid so mobile and desktop are tuned
+   * independently rather than one shrinking into the other.
+   *
+   * Hebrew has no ascenders, descenders or capitals, so body copy is given a
+   * generous 1.7 line-height and display type is never negatively tracked.
+   */
+  --text-display-xl: clamp(2.5rem, 1.6rem + 4.2vw, 4.5rem);
+  --text-display-xl--line-height: 1.08;
+  --text-display-xl--letter-spacing: 0;
+  --text-display-xl--font-weight: var(--font-weight-normal);
+
+  --text-display-lg: clamp(2rem, 1.4rem + 3vw, 3.25rem);
+  --text-display-lg--line-height: 1.12;
+  --text-display-lg--letter-spacing: 0;
+  --text-display-lg--font-weight: var(--font-weight-normal);
+
+  --text-display-md: clamp(1.625rem, 1.25rem + 1.9vw, 2.25rem);
+  --text-display-md--line-height: 1.2;
+  --text-display-md--letter-spacing: 0;
+  --text-display-md--font-weight: var(--font-weight-normal);
+
+  --text-display-sm: clamp(1.375rem, 1.2rem + 0.9vw, 1.625rem);
+  --text-display-sm--line-height: 1.3;
+  --text-display-sm--letter-spacing: 0;
+  --text-display-sm--font-weight: var(--font-weight-medium);
+
+  --text-lead: clamp(1.125rem, 1.05rem + 0.4vw, 1.3125rem);
+  --text-lead--line-height: 1.6;
+
+  --text-body: 1.0625rem;
+  --text-body--line-height: 1.7;
+
+  --text-body-sm: 0.9375rem;
+  --text-body-sm--line-height: 1.65;
+
+  /*
+   * Eyebrow / label. text-transform: uppercase does nothing in Hebrew, so this
+   * style separates itself from body copy through tracking, weight and colour.
+   */
+  --text-eyebrow: 0.8125rem;
+  --text-eyebrow--line-height: 1.4;
+  --text-eyebrow--letter-spacing: 0.14em;
+  --text-eyebrow--font-weight: var(--font-weight-medium);
+
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.5;
+
+  /* Layout */
+  --spacing: 0.25rem;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
+  --section-y: clamp(3.5rem, 8vw, 8rem);
+  --section-y-sm: clamp(2rem, 5vw, 4rem);
+  --section-y-lg: clamp(5rem, 11vw, 11rem);
+
+  /*
+   * Named `measure`, not `prose`: Tailwind ships a static max-w-prose (65ch)
+   * that would win over a --container-prose token and leak an off-system value.
+   */
+  --container-measure: 34rem;
+  --container-narrow: 44rem;
+  --container-content: 75rem;
+  --container-wide: 90rem;
+
+  /* Restraint: architectural corners, a single shadow, hairline borders. */
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --shadow-overlay: 0 12px 40px -16px
+    color-mix(in oklab, var(--color-charcoal-900) 18%, transparent);
+  --border-hairline: 1px;
+
+  /*
+   * Motion tokens only — no keyframes, no animation library. Tailwind has no
+   * --duration-* namespace, so these are consumed as duration-(--duration-base)
+   * rather than duration-base, which would silently do nothing.
+   */
+  --duration-instant: 1ms;
+  --duration-fast: 150ms;
+  --duration-base: 260ms;
+  --duration-slow: 480ms;
+  --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Interaction primitives, so base.css and components stay literal-free. */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 3px;
+  --underline-thickness: 1px;
+  --underline-offset: 0.25em;
+  --scroll-offset: 5rem;
+  --tap-target-min: 2.75rem;
+
+  /* Mobile-first breakpoints, min-width. */
+  --breakpoint-sm: 30rem;
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
+  --breakpoint-xl: 80rem;
+  --breakpoint-2xl: 96rem;
+}

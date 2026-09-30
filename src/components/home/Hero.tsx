@@ -1,0 +1,155 @@
+import { Button } from '@/components/Button'
+import { Container } from '@/components/Container'
+import { hero } from '@/content/home'
+import { primaryCta } from '@/content/navigation'
+
+/*
+ * Cover grade. Structure is unchanged. The photograph stays as authored; a
+ * global ink mix and a start-side veil put ivory type into the same
+ * relationship as the approved reference — cinematic, not a bright UI card.
+ *
+ * Desktop: type in the start (right) field. Mobile: type in the lower third,
+ * room held above.
+ */
+const coverGrade = {
+  backgroundColor: 'color-mix(in oklab, var(--color-ink) 30%, transparent)',
+}
+
+const typeVeilDesktop = {
+  backgroundImage:
+    'linear-gradient(to left, color-mix(in oklab, var(--color-ink) 46%, transparent), color-mix(in oklab, var(--color-ink) 16%, transparent) 40%, transparent 68%)',
+}
+
+const typeVeilMobile = {
+  backgroundImage:
+    'linear-gradient(to top, color-mix(in oklab, var(--color-ink) 52%, transparent), color-mix(in oklab, var(--color-ink) 18%, transparent) 46%, transparent 78%)',
+}
+
+const quietInverse = {
+  color: 'color-mix(in oklab, var(--color-ink-inverse) 72%, transparent)',
+}
+
+const quieterInverse = {
+  color: 'color-mix(in oklab, var(--color-ink-inverse) 58%, transparent)',
+}
+
+export function Hero() {
+  const { image, secondaryCta, aside, scrollCue, slides, currentSlide } = hero
+
+  return (
+    <section className="relative isolate min-h-svh overflow-hidden text-ink-inverse">
+      <figure className="absolute inset-0">
+        <img
+          src={image.src}
+          srcSet={image.srcSet}
+          sizes={image.sizes}
+          width={image.width}
+          height={image.height}
+          alt={image.alt}
+          decoding="async"
+          fetchPriority="high"
+          className="reveal-media media-cover object-[48%_42%] lg:object-[40%_46%]"
+        />
+      </figure>
+
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={coverGrade}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 hidden lg:block"
+        style={typeVeilDesktop}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 lg:hidden"
+        style={typeVeilMobile}
+      />
+
+      <div className="relative flex min-h-svh flex-col justify-end lg:justify-center">
+        <Container
+          size="wide"
+          className="flex justify-start pb-(--section-y-sm) pt-[clamp(5.5rem,12vh,7rem)] lg:pb-(--section-y-sm) lg:pt-[clamp(5.5rem,12vh,7.5rem)]"
+        >
+          <div className="w-full max-w-[calc(var(--spacing)*112)]">
+            <p className="reveal text-eyebrow" style={quietInverse}>
+              {hero.eyebrow}
+            </p>
+
+            <h1 className="reveal mt-4 whitespace-pre-line text-display-xl">
+              {hero.headline}
+            </h1>
+
+            <p
+              className="reveal mt-5 text-body [--reveal-delay:var(--duration-fast)]"
+              style={quietInverse}
+            >
+              {hero.supporting}
+            </p>
+
+            <div className="reveal mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 [--reveal-delay:var(--duration-base)]">
+              <Button href={primaryCta.href} variant="solid" size="sm">
+                {primaryCta.label}
+              </Button>
+              <Button href={secondaryCta.href} variant="outline" size="sm" inverse>
+                {secondaryCta.label}
+              </Button>
+            </div>
+          </div>
+        </Container>
+      </div>
+
+      <ul
+        aria-hidden="true"
+        className="absolute end-(--gutter) top-1/2 hidden -translate-y-1/2 flex-col gap-1.5 text-caption lg:flex"
+        style={quieterInverse}
+      >
+        {aside.map((word) => (
+          <li key={word} className="ltr-isolate">
+            {word}
+          </li>
+        ))}
+      </ul>
+
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden lg:block">
+        <Container size="wide" className="flex items-end justify-between pb-(--gutter)">
+          <ol
+            aria-hidden="true"
+            className="ltr-isolate flex gap-3 text-caption"
+            style={quieterInverse}
+          >
+            {slides.map((slide, index) => (
+              <li
+                key={slide}
+                className={
+                  index === currentSlide
+                    ? 'hairline-b border-ink-inverse text-ink-inverse'
+                    : undefined
+                }
+              >
+                <span className="ltr-isolate">{slide}</span>
+              </li>
+            ))}
+          </ol>
+
+          <p
+            aria-hidden="true"
+            className="flex items-center gap-2 text-caption"
+            style={quieterInverse}
+          >
+            {scrollCue}
+            <span
+              className="size-1.5 rotate-45 border-solid border-current"
+              style={{
+                borderRightWidth: 'var(--border-hairline)',
+                borderBottomWidth: 'var(--border-hairline)',
+              }}
+            />
+          </p>
+        </Container>
+      </div>
+    </section>
+  )
+}

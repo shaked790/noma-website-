@@ -1,0 +1,21 @@
+/*
+ * Stylesheet entry point. Order matters: fonts, then Tailwind, then our theme
+ * tokens, then the layers that consume them.
+ *
+ * Both font packages are self-hosted variable woff2 with Hebrew and Latin
+ * subsets split by unicode-range, so no request leaves the origin at runtime.
+ */
+@import '@fontsource-variable/frank-ruhl-libre';
+@import '@fontsource-variable/assistant';
+
+/*
+ * Tailwind's source scanning stops at the repository root and honours every
+ * .gitignore above it. This project lives under ~/.cursor, whose .gitignore
+ * starts with `*`, so without the local .git directory marking the boundary
+ * every source file counts as ignored and no utilities are generated at all.
+ */
+@import 'tailwindcss';
+
+@import './theme.css';
+@import './base.css';
+@import './utilities.css';

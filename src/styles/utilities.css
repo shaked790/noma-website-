@@ -1,0 +1,174 @@
+/*
+ * Utilities for things Tailwind cannot express. Tailwind already ships
+ * `sr-only`, so there is no hand-rolled visually-hidden helper here.
+ */
+
+/* The opt-in editorial underline. Deliberately not a global anchor style. */
+@utility link-underline {
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--underline-thickness);
+  text-underline-offset: var(--underline-offset);
+  transition-property: color, text-decoration-color;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-out);
+
+  &:hover {
+    color: var(--color-accent);
+  }
+}
+
+/*
+ * Latin runs inside Hebrew text — phone numbers, emails, dimensions — reorder
+ * incorrectly without an isolated LTR context.
+ *
+ * Apply to an inline run, not to a block that fills its container: `direction`
+ * also governs alignment, so a stretched element would pull its text to the
+ * left. On a flex or grid child, pair it with `self-start` or a fitted width.
+ */
+@utility ltr-isolate {
+  direction: ltr;
+  unicode-bidi: isolate;
+}
+
+/* For directional glyphs authored pointing left-to-right. */
+@utility icon-flip {
+  transform: scaleX(-1);
+}
+
+/*
+ * Sections and controls separate with a hairline border, never a shadow.
+ * The single-side variants use block-start/block-end so a header or footer rule
+ * stays on the correct axis without reaching for a raw border width.
+ */
+@utility hairline {
+  border-style: solid;
+  border-width: var(--border-hairline);
+}
+
+@utility hairline-t {
+  border-block-start-style: solid;
+  border-block-start-width: var(--border-hairline);
+}
+
+@utility hairline-b {
+  border-block-end-style: solid;
+  border-block-end-width: var(--border-hairline);
+}
+
+@utility hairline-e {
+  border-inline-end-style: solid;
+  border-inline-end-width: var(--border-hairline);
+}
+
+@utility field-line {
+  width: 100%;
+  min-height: var(--tap-target-min);
+  padding-block: 0.5rem;
+  padding-inline: 0.75rem;
+  border-style: solid;
+  border-width: var(--border-hairline);
+  border-color: var(--color-border);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface-raised);
+  color: var(--color-ink);
+  appearance: auto;
+
+  &::placeholder {
+    color: var(--color-ink-muted);
+  }
+}
+
+@utility media-cover {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/*
+ * A single entrance: fade plus a short rise. The distance comes off the spacing
+ * token and the delay off the duration tokens, so no literal enters the motion
+ * layer and the amplitude scales with the rest of the system.
+ *
+ * Expressing the stagger as a duration token is deliberate. The reduced-motion
+ * block in base.css reassigns those tokens to --duration-instant, so the delays
+ * collapse with the animation rather than leaving content blank for their length.
+ *
+ * translateY is intentional rather than a logical property: the rise is vertical
+ * and must not flip with writing direction.
+ */
+@keyframes noma-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--reveal-rise));
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility reveal {
+  --reveal-rise: calc(var(--spacing) * 4);
+  animation: noma-reveal var(--duration-slow) var(--ease-editorial) both;
+  animation-delay: var(--reveal-delay, var(--duration-instant));
+}
+
+/*
+ * Media counterpart: a fade plus a short scale, not a rise. The figure must
+ * clip overflow so the overscale never shifts layout. Reduced-motion collapses
+ * the duration token, so the image simply appears at its resting scale.
+ */
+@keyframes noma-reveal-media {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@utility reveal-media {
+  animation: noma-reveal-media var(--duration-slow) var(--ease-editorial) both;
+}
+
+/*
+ * Native <dialog> cannot style ::backdrop from Tailwind utilities. The panel
+ * stays opaque ivory; the scrim is ink only — not glass on the surface.
+ */
+@keyframes noma-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes noma-dialog-in-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@utility dialog-panel {
+  animation: noma-dialog-in var(--duration-base) var(--ease-editorial) both;
+
+  &::backdrop {
+    background-color: color-mix(in oklab, var(--color-ink) 52%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    animation-name: noma-dialog-in-fade;
+  }
+}

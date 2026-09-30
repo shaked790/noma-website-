@@ -1,0 +1,143 @@
+/*
+ * Global element defaults. Every declaration resolves through a token from
+ * theme.css — no literal values belong in this file.
+ */
+
+@layer base {
+  html {
+    /* The scrollbar sits on the left in RTL; reserving it prevents a shift. */
+    scrollbar-gutter: stable;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+
+  body {
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    font-family: var(--font-body);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+    text-align: start;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-display);
+    font-weight: var(--font-weight-normal);
+    text-wrap: balance;
+  }
+
+  h1 {
+    font-size: var(--text-display-xl);
+    line-height: var(--text-display-xl--line-height);
+  }
+
+  h2 {
+    font-size: var(--text-display-lg);
+    line-height: var(--text-display-lg--line-height);
+  }
+
+  h3 {
+    font-size: var(--text-display-md);
+    line-height: var(--text-display-md--line-height);
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-size: var(--text-display-sm);
+    line-height: var(--text-display-sm--line-height);
+    font-weight: var(--font-weight-medium);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /*
+   * Anchors inherit colour and carry no underline. The editorial underline is
+   * an explicit, per-use decision applied with the `link-underline` utility, so
+   * navigation, buttons and wrapper links need nothing unset.
+   */
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  :focus-visible {
+    outline: var(--focus-ring-width) solid var(--color-focus);
+    outline-offset: var(--focus-ring-offset);
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* Clearance for a future sticky header when jumping to an anchor. */
+  :target {
+    scroll-margin-block-start: var(--scroll-offset);
+  }
+
+  img,
+  video,
+  canvas,
+  picture {
+    display: block;
+    max-inline-size: 100%;
+  }
+
+  /*
+   * Icons size from their own width/height. Grouping svg with photographs
+   * made inline icons inherit the full width of a form or button.
+   */
+  svg {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  img,
+  video {
+    block-size: auto;
+  }
+
+  /* Form controls do not inherit type by default. */
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-ink-inverse);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :root {
+      --duration-fast: var(--duration-instant);
+      --duration-base: var(--duration-instant);
+      --duration-slow: var(--duration-instant);
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: var(--duration-instant) !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: var(--duration-instant) !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
