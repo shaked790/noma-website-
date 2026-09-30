@@ -1,19 +1,30 @@
-import heroWide from '@/assets/hero-1920.webp'
-import heroNarrow from '@/assets/hero-960.webp'
 import studioPortrait from '@/assets/studio-portrait.png'
 import principleLife from '@/assets/principle-life.png'
 import principlePlan from '@/assets/principle-plan.png'
 import principleMaterial from '@/assets/principle-material.png'
 import principleTime from '@/assets/principle-time.png'
 import contactInterior from '@/assets/projects/beit-herzliya/herzliya-wide-living.png'
+import { getProjectBySlug } from '@/content/projects'
+
+export type HeroSlide = {
+  src: string
+  alt: string
+  width: number
+  height: number
+}
+
+function heroSlide(slug: string): HeroSlide {
+  const project = getProjectBySlug(slug)
+  if (!project) throw new Error(`Missing project: ${slug}`)
+  return project.heroImage
+}
 
 /*
  * Homepage content. The Hero reads everything it renders from here, so replacing
  * the photograph or the copy never touches the component's layout.
  *
- * PLACEHOLDER PHOTOGRAPH — hero-1920.webp / hero-960.webp are a generated demo
- * interior, not a NOMA project. Swap both files and the alt text when a real
- * client-approved photograph is available; nothing else needs to change.
+ * Background stills come from each project's heroImage, looked up by slug so
+ * array order in projects.ts cannot swap the sequence.
  */
 export const hero = {
   eyebrow: 'בתים שמתחברים לאנשים',
@@ -26,16 +37,11 @@ export const hero = {
   },
   aside: ['HOMES', 'PEOPLE', 'BALANCE', 'ALWAYS'],
   scrollCue: 'גללו למטה',
-  slides: ['01', '02', '03', '04'] as const,
-  currentSlide: 0,
-  image: {
-    src: heroWide,
-    srcSet: `${heroNarrow} 960w, ${heroWide} 1920w`,
-    sizes: '100vw',
-    width: 1920,
-    height: 1080,
-    alt: 'חלל מגורים מואר: ספת פשתן, שולחן אבן, כורסה מעץ וקיר חלונות עם וילונות שמביט אל מרפסת ונוף עירוני.',
-  },
+  slides: [
+    heroSlide('beit-herzliya'),
+    heroSlide('dira-tel-aviv'),
+    heroSlide('beit-caesarea'),
+  ] as const satisfies readonly HeroSlide[],
 }
 
 /*

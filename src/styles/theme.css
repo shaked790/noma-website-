@@ -145,6 +145,7 @@
   --duration-fast: 150ms;
   --duration-base: 260ms;
   --duration-slow: 480ms;
+  --duration-cinematic: 1.2s;
   --ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
   --ease-editorial: cubic-bezier(0.16, 1, 0.3, 1);
 

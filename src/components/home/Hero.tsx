@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { hero } from '@/content/home'
 import { primaryCta } from '@/content/navigation'
+import { cn } from '@/lib/cn'
 
 /*
  * Cover grade. Structure is unchanged. The photograph stays as authored; a
@@ -33,23 +35,59 @@ const quieterInverse = {
   color: 'color-mix(in oklab, var(--color-ink-inverse) 58%, transparent)',
 }
 
+const AUTOPLAY_MS = 5500
+
 export function Hero() {
-  const { image, secondaryCta, aside, scrollCue, slides, currentSlide } = hero
+  const { secondaryCta, aside, scrollCue, slides } = hero
+  const [index, setIndex] = useState(0)
+  const [reducedMotion, setReducedMotion] = useState(false)
+  const [hidden, setHidden] = useState(false)
+
+  useEffect(() => {
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const onMotion = () => setReducedMotion(motion.matches)
+    const onVisibility = () => setHidden(document.hidden)
+    onMotion()
+    onVisibility()
+    motion.addEventListener('change', onMotion)
+    document.addEventListener('visibilitychange', onVisibility)
+    return () => {
+      motion.removeEventListener('change', onMotion)
+      document.removeEventListener('visibilitychange', onVisibility)
+    }
+  }, [])
+
+  useEffect(() => {
+    if (reducedMotion || hidden) return
+    const id = window.setTimeout(() => {
+      setIndex((current) => (current + 1) % slides.length)
+    }, AUTOPLAY_MS)
+    return () => window.clearTimeout(id)
+  }, [hidden, index, reducedMotion, slides.length])
 
   return (
     <section className="relative isolate min-h-svh overflow-hidden text-ink-inverse">
-      <figure className="absolute inset-0">
-        <img
-          src={image.src}
-          srcSet={image.srcSet}
-          sizes={image.sizes}
-          width={image.width}
-          height={image.height}
-          alt={image.alt}
-          decoding="async"
-          fetchPriority="high"
-          className="reveal-media media-cover object-[48%_42%] lg:object-[40%_46%]"
-        />
+      <figure className="reveal-media absolute inset-0">
+        {slides.map((slide, slideIndex) => {
+          const active = slideIndex === index
+          return (
+            <img
+              key={slide.src}
+              src={slide.src}
+              alt={active ? slide.alt : ''}
+              aria-hidden={active ? undefined : true}
+              width={slide.width}
+              height={slide.height}
+              decoding="async"
+              fetchPriority={slideIndex === 0 ? 'high' : 'low'}
+              loading="eager"
+              className={cn(
+                'absolute inset-0 media-cover object-[48%_42%] transition-opacity duration-(--duration-cinematic) ease-[var(--ease-out)] lg:object-[40%_46%]',
+                active ? 'opacity-100' : 'opacity-0',
+              )}
+            />
+          )
+        })}
       </figure>
 
       <div
@@ -116,22 +154,33 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden lg:block">
         <Container size="wide" className="flex items-end justify-between pb-(--gutter)">
           <ol
-            aria-hidden="true"
-            className="ltr-isolate flex gap-3 text-caption"
+            className="pointer-events-auto ltr-isolate flex gap-3 text-caption"
             style={quieterInverse}
           >
-            {slides.map((slide, index) => (
-              <li
-                key={slide}
-                className={
-                  index === currentSlide
-                    ? 'hairline-b border-ink-inverse text-ink-inverse'
-                    : undefined
-                }
-              >
-                <span className="ltr-isolate">{slide}</span>
-              </li>
-            ))}
+            {slides.map((_, slideIndex) => {
+              const current = slideIndex === index
+              const label = String(slideIndex + 1).padStart(2, '0')
+              return (
+                <li
+                  key={label}
+                  className={
+                    current
+                      ? 'hairline-b border-ink-inverse text-ink-inverse'
+                      : undefined
+                  }
+                >
+                  <button
+                    type="button"
+                    aria-label={`תמונה ${slideIndex + 1} מתוך ${slides.length}`}
+                    aria-current={current ? true : undefined}
+                    onClick={() => setIndex(slideIndex)}
+                    className="border-0 bg-transparent p-0 font-body text-caption text-inherit"
+                  >
+                    <span className="ltr-isolate">{label}</span>
+                  </button>
+                </li>
+              )
+            })}
           </ol>
 
           <p

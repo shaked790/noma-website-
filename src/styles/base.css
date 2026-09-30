@@ -129,6 +129,7 @@
       --duration-fast: var(--duration-instant);
       --duration-base: var(--duration-instant);
       --duration-slow: var(--duration-instant);
+      --duration-cinematic: var(--duration-instant);
     }
 
     *,
