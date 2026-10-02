@@ -111,24 +111,24 @@ export function Hero() {
           size="wide"
           className="flex justify-start pb-[calc(var(--section-y-sm)+6vh)] pt-[clamp(5.5rem,12vh,7rem)] lg:pb-(--section-y-sm) lg:pt-[clamp(5.5rem,12vh,7.5rem)]"
         >
-          <div className="w-full max-w-[calc(var(--spacing)*112)]">
+          <div className="w-full max-w-narrow">
             <p className="reveal text-eyebrow" style={quietInverse}>
               {hero.eyebrow}
             </p>
 
-            <h1 className="reveal mt-4 whitespace-pre-line text-display-xl">
+            <h1 className="hero-display reveal mt-3 whitespace-pre-line lg:mt-4">
               {hero.headline}
             </h1>
 
             <p
-              className="reveal mt-5 text-body [--reveal-delay:var(--duration-fast)]"
+              className="reveal mt-6 max-w-measure text-lead [--reveal-delay:var(--duration-fast)] lg:mt-7"
               style={quietInverse}
             >
               {hero.supporting}
             </p>
 
-            <div className="reveal mt-8 flex flex-wrap items-center gap-x-4 gap-y-3 [--reveal-delay:var(--duration-base)]">
-              <Button href={primaryCta.href} variant="solid" size="sm">
+            <div className="reveal mt-8 flex flex-wrap items-center gap-x-5 gap-y-3 [--reveal-delay:var(--duration-base)] lg:mt-10">
+              <Button href={primaryCta.href} variant="solid" size="md">
                 {primaryCta.label}
               </Button>
               <Button href={secondaryCta.href} variant="outline" size="sm" inverse>
@@ -141,7 +141,7 @@ export function Hero() {
 
       <ul
         aria-hidden="true"
-        className="absolute end-(--gutter) top-1/2 hidden -translate-y-1/2 flex-col gap-1.5 text-caption lg:flex"
+        className="absolute end-(--gutter) top-1/2 hidden -translate-y-1/2 flex-col gap-2 text-eyebrow lg:flex"
         style={quieterInverse}
       >
         {aside.map((word) => (
@@ -154,7 +154,7 @@ export function Hero() {
       <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden lg:block">
         <Container size="wide" className="flex items-end justify-between pb-(--gutter)">
           <ol
-            className="pointer-events-auto ltr-isolate flex gap-3 text-caption"
+            className="pointer-events-auto ltr-isolate flex items-baseline gap-5 text-eyebrow"
             style={quieterInverse}
           >
             {slides.map((_, slideIndex) => {
@@ -165,7 +165,7 @@ export function Hero() {
                   key={label}
                   className={
                     current
-                      ? 'hairline-b border-ink-inverse text-ink-inverse'
+                      ? 'hairline-b border-ink-inverse pb-1 text-ink-inverse'
                       : undefined
                   }
                 >
@@ -174,7 +174,7 @@ export function Hero() {
                     aria-label={`תמונה ${slideIndex + 1} מתוך ${slides.length}`}
                     aria-current={current ? true : undefined}
                     onClick={() => setIndex(slideIndex)}
-                    className="border-0 bg-transparent p-0 font-body text-caption text-inherit"
+                    className="border-0 bg-transparent p-0 font-body text-eyebrow text-inherit"
                   >
                     <span className="ltr-isolate">{label}</span>
                   </button>

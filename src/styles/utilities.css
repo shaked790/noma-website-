@@ -92,6 +92,18 @@
 }
 
 /*
+ * Hero display only. Scoped here so the global display-xl step — used by
+ * Studio and the About modal — does not move with the cover headline.
+ */
+@utility hero-display {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 1.45rem + 5.4vw, 5.25rem);
+  line-height: 1.05;
+  letter-spacing: 0;
+  font-weight: var(--font-weight-normal);
+}
+
+/*
  * A single entrance: fade plus a short rise. The distance comes off the spacing
  * token and the delay off the duration tokens, so no literal enters the motion
  * layer and the amplitude scales with the rest of the system.
