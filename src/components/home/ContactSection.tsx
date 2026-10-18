@@ -1,9 +1,10 @@
-import { type FormEvent, type ReactNode, useState } from 'react'
+import { type FormEvent, type ReactNode, useRef, useState } from 'react'
 import { Button } from '@/components/Button'
 import { Container } from '@/components/Container'
 import { Section } from '@/components/Section'
 import { contact } from '@/content/home'
 import { contactDetails, whatsappUrl } from '@/content/navigation'
+import { cn } from '@/lib/cn'
 import { submitLead } from '@/lib/submitLead'
 
 function splitMarker(text: string, marker: string) {
@@ -68,6 +69,18 @@ function fieldErrorId(id: string) {
   return `${id}-error`
 }
 
+function controlProps(invalid: boolean, extra?: string) {
+  return {
+    className: cn('field-line mt-1.5', extra),
+    style: invalid
+      ? {
+          borderColor: 'var(--color-accent)',
+          boxShadow: 'inset 0 0 0 1px var(--color-accent)',
+        }
+      : undefined,
+  }
+}
+
 export function ContactSection() {
   const {
     eyebrow,
@@ -81,12 +94,19 @@ export function ContactSection() {
     whatsappMessage,
     note,
     errors,
+    status: statusCopy,
   } = contact
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [messageLength, setMessageLength] = useState(0)
+  const [pending, setPending] = useState(false)
+  const [submitStatus, setSubmitStatus] = useState<
+    'idle' | 'unavailable' | 'failed' | 'delivered'
+  >('idle')
+  const statusRef = useRef<HTMLDivElement>(null)
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
+    if (pending) return
     const form = event.currentTarget
     const next: Record<string, string> = {}
 
@@ -108,18 +128,38 @@ export function ContactSection() {
     }
 
     setFieldErrors(next)
-    if (Object.keys(next).length > 0) return
+    if (Object.keys(next).length > 0) {
+      setSubmitStatus('idle')
+      return
+    }
 
+    setPending(true)
     const data = new FormData(form)
-    void submitLead({
-      name: String(data.get(fields.name.name) ?? ''),
-      phone: String(data.get(fields.phone.name) ?? ''),
-      email: String(data.get(fields.email.name) ?? ''),
-      city: String(data.get(fields.city.name) ?? ''),
-      projectType: String(data.get(fields.projectType.name) ?? ''),
-      stage: String(data.get(fields.stage.name) ?? ''),
-      message: String(data.get(fields.message.name) ?? ''),
-    })
+    try {
+      const result = await submitLead({
+        name: String(data.get(fields.name.name) ?? ''),
+        phone: String(data.get(fields.phone.name) ?? ''),
+        email: String(data.get(fields.email.name) ?? ''),
+        city: String(data.get(fields.city.name) ?? ''),
+        projectType: String(data.get(fields.projectType.name) ?? ''),
+        stage: String(data.get(fields.stage.name) ?? ''),
+        message: String(data.get(fields.message.name) ?? ''),
+      })
+      if (result.delivered) {
+        setSubmitStatus('delivered')
+      } else {
+        setSubmitStatus(
+          result.reason === 'failed' ? 'failed' : 'unavailable',
+        )
+      }
+    } catch {
+      setSubmitStatus('failed')
+    } finally {
+      setPending(false)
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => statusRef.current?.focus())
+      })
+    }
   }
 
   return (
@@ -137,7 +177,7 @@ export function ContactSection() {
           onSubmit={handleSubmit}
         >
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <p className="min-w-0">
+            <div className="min-w-0">
               <FieldLabel htmlFor={fields.name.id}>{fields.name.label}</FieldLabel>
               <input
                 id={fields.name.id}
@@ -151,14 +191,14 @@ export function ContactSection() {
                     ? fieldErrorId(fields.name.id)
                     : undefined
                 }
-                className="field-line mt-1.5"
+                {...controlProps(!!fieldErrors[fields.name.name])}
               />
               <FieldError
                 id={fieldErrorId(fields.name.id)}
                 message={fieldErrors[fields.name.name]}
               />
-            </p>
-            <p className="min-w-0">
+            </div>
+            <div className="min-w-0">
               <FieldLabel htmlFor={fields.phone.id}>
                 {fields.phone.label}
               </FieldLabel>
@@ -174,14 +214,14 @@ export function ContactSection() {
                     ? fieldErrorId(fields.phone.id)
                     : undefined
                 }
-                className="field-line mt-1.5"
+                {...controlProps(!!fieldErrors[fields.phone.name])}
               />
               <FieldError
                 id={fieldErrorId(fields.phone.id)}
                 message={fieldErrors[fields.phone.name]}
               />
-            </p>
-            <p className="min-w-0">
+            </div>
+            <div className="min-w-0">
               <FieldLabel htmlFor={fields.email.id}>
                 {fields.email.label}
               </FieldLabel>
@@ -197,14 +237,14 @@ export function ContactSection() {
                     ? fieldErrorId(fields.email.id)
                     : undefined
                 }
-                className="field-line mt-1.5"
+                {...controlProps(!!fieldErrors[fields.email.name])}
               />
               <FieldError
                 id={fieldErrorId(fields.email.id)}
                 message={fieldErrors[fields.email.name]}
               />
-            </p>
-            <p className="min-w-0">
+            </div>
+            <div className="min-w-0">
               <FieldLabel htmlFor={fields.city.id}>{fields.city.label}</FieldLabel>
               <input
                 id={fields.city.id}
@@ -218,16 +258,16 @@ export function ContactSection() {
                     ? fieldErrorId(fields.city.id)
                     : undefined
                 }
-                className="field-line mt-1.5"
+                {...controlProps(!!fieldErrors[fields.city.name])}
               />
               <FieldError
                 id={fieldErrorId(fields.city.id)}
                 message={fieldErrors[fields.city.name]}
               />
-            </p>
+            </div>
           </div>
 
-          <p className="min-w-0">
+          <div className="min-w-0">
             <FieldLabel htmlFor={fields.projectType.id}>
               {fields.projectType.label}
             </FieldLabel>
@@ -244,7 +284,7 @@ export function ContactSection() {
                   ? fieldErrorId(fields.projectType.id)
                   : undefined
               }
-              className="field-line mt-1.5"
+              {...controlProps(!!fieldErrors[fields.projectType.name])}
             >
               <option value="" disabled>
                 {fields.projectType.placeholder}
@@ -259,9 +299,9 @@ export function ContactSection() {
               id={fieldErrorId(fields.projectType.id)}
               message={fieldErrors[fields.projectType.name]}
             />
-          </p>
+          </div>
 
-          <p className="min-w-0">
+          <div className="min-w-0">
             <FieldLabel htmlFor={fields.stage.id}>{fields.stage.label}</FieldLabel>
             <select
               id={fields.stage.id}
@@ -274,7 +314,7 @@ export function ContactSection() {
                   ? fieldErrorId(fields.stage.id)
                   : undefined
               }
-              className="field-line mt-1.5"
+              {...controlProps(!!fieldErrors[fields.stage.name])}
             >
               <option value="" disabled>
                 {fields.stage.placeholder}
@@ -289,9 +329,9 @@ export function ContactSection() {
               id={fieldErrorId(fields.stage.id)}
               message={fieldErrors[fields.stage.name]}
             />
-          </p>
+          </div>
 
-          <p className="min-w-0">
+          <div className="min-w-0">
             <FieldLabel htmlFor={fields.message.id}>
               {fields.message.label}
             </FieldLabel>
@@ -309,7 +349,7 @@ export function ContactSection() {
                   : undefined
               }
               onChange={(event) => setMessageLength(event.target.value.length)}
-              className="field-line mt-1.5 min-h-36 resize-y"
+              {...controlProps(!!fieldErrors[fields.message.name], 'min-h-36 resize-y')}
             />
             <FieldError
               id={fieldErrorId(fields.message.id)}
@@ -320,15 +360,34 @@ export function ContactSection() {
                 {messageLength}/{fields.message.maxLength}
               </span>
             </span>
-          </p>
+          </div>
 
           <div className="mt-2 flex flex-col gap-5">
-            <Button type="submit" variant="solid" size="lg" className="w-full">
-              {submitLabel}
+            <Button
+              type="submit"
+              variant="solid"
+              size="lg"
+              className="w-full"
+              disabled={pending}
+            >
+              {pending ? statusCopy.submitting : submitLabel}
               <span aria-hidden="true" className="motion-arrow ms-2">
                 ←
               </span>
             </Button>
+
+            <div
+              ref={statusRef}
+              tabIndex={-1}
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              className="text-body-sm text-ink-secondary outline-none"
+            >
+              {submitStatus === 'unavailable' ? statusCopy.unavailable : null}
+              {submitStatus === 'failed' ? statusCopy.failed : null}
+              {submitStatus === 'delivered' ? statusCopy.delivered : null}
+            </div>
 
             <p className="flex items-center gap-4 text-caption text-ink-muted">
               <span aria-hidden="true" className="h-px flex-1 bg-border" />

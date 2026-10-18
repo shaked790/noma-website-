@@ -83,6 +83,16 @@
   &:focus-visible {
     border-color: var(--color-ink-muted);
   }
+
+  &[aria-invalid='true'],
+  &.is-invalid {
+    border-color: var(--color-accent);
+  }
+
+  &[aria-invalid='true']:focus-visible,
+  &.is-invalid:focus-visible {
+    border-color: var(--color-accent-strong);
+  }
 }
 
 @utility media-cover {

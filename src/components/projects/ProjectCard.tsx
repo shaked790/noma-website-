@@ -7,9 +7,14 @@ import { cn } from '@/lib/cn'
 export type ProjectCardProps = {
   project: Project
   className?: string
+  headingLevel?: 'h2' | 'h3'
 }
 
-export function ProjectCard({ project, className }: ProjectCardProps) {
+export function ProjectCard({
+  project,
+  className,
+  headingLevel: Heading = 'h3',
+}: ProjectCardProps) {
   return (
     <Link
       to={projectPath(project.slug)}
@@ -31,7 +36,7 @@ export function ProjectCard({ project, className }: ProjectCardProps) {
 
       <div className="mt-5 flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <h3 className="text-display-sm">{project.title}</h3>
+          <Heading className="text-display-sm">{project.title}</Heading>
           <p className="mt-2 text-body-sm text-ink-secondary">{project.shortDescription}</p>
         </div>
         <span aria-hidden="true" className="motion-arrow mt-1 shrink-0 text-body-sm">

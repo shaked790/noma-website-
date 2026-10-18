@@ -32,10 +32,16 @@ export const hero = {
     'תכנון ועיצוב פנים לדירות ובתים פרטיים, עם ליווי מלא מהרעיון ועד הפרט האחרון.',
   secondaryCta: {
     label: 'לצפייה בפרויקטים',
-    href: '#projects',
+    href: '/#projects',
   },
   aside: ['HOMES', 'PEOPLE', 'BALANCE', 'ALWAYS'],
   scrollCue: 'גללו למטה',
+  slideshow: {
+    pause: 'השהה',
+    play: 'המשך',
+    pauseLabel: 'השהה מעבר אוטומטי בין התמונות',
+    playLabel: 'המשך מעבר אוטומטי בין התמונות',
+  },
   slides: [
     heroSlide('beit-herzliya'),
     heroSlide('dira-tel-aviv'),
@@ -155,7 +161,7 @@ export const studioAbout = {
   ],
   cta: {
     label: 'בואו נדבר על הפרויקט שלכם',
-    href: '#contact',
+    href: '/#contact',
   },
   closeLabel: 'סגירה',
   portrait: {
@@ -176,7 +182,7 @@ export const process = {
   body: 'אנחנו מאמינים בתהליך עבודה ברור ושקוף, שמאפשר לנו להכיר לעומק את הצרכים שלכם וליצור חללים שמרגישים נכון — גם היום וגם בעתיד.',
   cta: {
     label: 'להכיר את התהליך',
-    href: '#contact',
+    href: '/#contact',
   },
   aside: ['SPACES', 'THAT', 'BELONG'],
   image: {
@@ -228,6 +234,14 @@ export const contact = {
   whatsappMessage:
     'שלום אורי, הגעתי לאתר של NOMA ואשמח לשמוע על תהליך עיצוב פנים עבור הפרויקט שלי.',
   note: 'אפשר לכתוב כאן או לפנות בוואטסאפ — בלי התחייבות.',
+  status: {
+    submitting: 'שולחים…',
+    unavailable:
+      'הטופס עדיין לא מחובר לשליחה. אפשר לפנות בוואטסאפ, בטלפון או באימייל.',
+    failed:
+      'לא הצלחנו לשלוח את הטופס. אפשר לפנות בוואטסאפ, בטלפון או באימייל.',
+    delivered: 'הפנייה התקבלה.',
+  },
   fields: {
     name: { id: 'lead-name', name: 'name', label: 'שם מלא', autoComplete: 'name' },
     phone: { id: 'lead-phone', name: 'phone', label: 'טלפון', autoComplete: 'tel' },

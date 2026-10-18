@@ -56,6 +56,22 @@ export function Navbar({
     return () => window.removeEventListener('scroll', onScroll)
   }, [overlay])
 
+  useEffect(() => {
+    const desktop = window.matchMedia('(min-width: 64rem)')
+    function closeIfDesktop() {
+      if (desktop.matches || window.innerWidth >= 1024) setOpen(false)
+    }
+    desktop.addEventListener('change', closeIfDesktop)
+    window.addEventListener('resize', closeIfDesktop)
+    const observer = new ResizeObserver(closeIfDesktop)
+    observer.observe(document.documentElement)
+    return () => {
+      desktop.removeEventListener('change', closeIfDesktop)
+      window.removeEventListener('resize', closeIfDesktop)
+      observer.disconnect()
+    }
+  }, [])
+
   function handleKeyDown(event: KeyboardEvent<HTMLElement>) {
     if (event.key === 'Escape' && open) {
       setOpen(false)
@@ -75,7 +91,9 @@ export function Navbar({
               scrolled ? 'border-border-strong bg-surface-raised' : 'border-border',
             ),
         overlay && !open && 'text-ink-inverse',
-        overlay && open && 'bg-surface text-ink',
+        overlay &&
+          open &&
+          'max-lg:bg-surface max-lg:text-ink lg:text-ink-inverse',
         className,
       )}
     >

@@ -13,15 +13,15 @@ export type NavItem = {
 }
 
 export const navItems: NavItem[] = [
-  { label: 'סטודיו', href: '#studio' },
+  { label: 'סטודיו', href: '/#studio' },
   { label: 'פרויקטים', href: '/#projects' },
-  { label: 'תהליך', href: '#process' },
-  { label: 'יצירת קשר', href: '#contact' },
+  { label: 'תהליך', href: '/#process' },
+  { label: 'יצירת קשר', href: '/#contact' },
 ]
 
 export const primaryCta = {
   label: 'שיחת היכרות',
-  href: '#contact',
+  href: '/#contact',
 }
 
 export const contactDetails = {

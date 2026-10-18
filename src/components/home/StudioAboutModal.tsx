@@ -109,11 +109,13 @@ export function StudioAboutModal({
         </button>
 
         <figure className="order-1 shrink-0 overflow-hidden md:order-none md:col-span-4 md:col-start-9 md:row-start-1 md:h-full md:min-h-0 lg:col-span-5 lg:col-start-8">
-          <img
+            <img
             src={portrait.src}
             alt={portrait.alt}
             width={portrait.width}
             height={portrait.height}
+            loading="lazy"
+            decoding="async"
             className="aspect-[16/10] w-full object-cover object-[center_18%] md:aspect-auto md:h-full"
           />
         </figure>

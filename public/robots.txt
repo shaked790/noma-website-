@@ -1,0 +1,4 @@
+# Public site: crawl HTML, CSS, and JavaScript. Add a Sitemap line when the
+# production origin is known — do not point crawlers at localhost.
+User-agent: *
+Allow: /

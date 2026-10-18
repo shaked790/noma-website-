@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Local QA captures and unfinished project art — keep on disk, never publish
+.shots/
+src/assets/projects/dira-jaffa/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

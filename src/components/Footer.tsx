@@ -54,7 +54,7 @@ export function Footer({ items = navItems, className }: FooterProps) {
             aria-label={footer.navLabel}
             className="hairline-t border-border pt-8 min-w-0 lg:border-t-0 lg:hairline-e lg:border-border lg:px-10 lg:pt-0 lg:ps-10"
           >
-            <h3 className="font-body text-eyebrow text-ink-muted">{footer.navLabel}</h3>
+            <h2 className="font-body text-eyebrow text-ink-muted">{footer.navLabel}</h2>
             <ul className="mt-3 flex flex-col">
               {navLinks.map((item) => (
                 <li key={item.href}>
@@ -70,9 +70,9 @@ export function Footer({ items = navItems, className }: FooterProps) {
             aria-label={footer.projectsLabel}
             className="hairline-t border-border pt-8 min-w-0 lg:border-t-0 lg:hairline-e lg:border-border lg:px-10 lg:pt-0"
           >
-            <h3 className="font-body text-eyebrow text-ink-muted">
+            <h2 className="font-body text-eyebrow text-ink-muted">
               {footer.projectsLabel}
-            </h3>
+            </h2>
             <ul className="mt-3 flex flex-col">
               {projects.map((project) => (
                 <li key={project.slug}>
@@ -85,9 +85,9 @@ export function Footer({ items = navItems, className }: FooterProps) {
           </nav>
 
           <div className="hairline-t border-border pt-8 min-w-0 lg:border-t-0 lg:pt-0 lg:ps-10">
-            <h3 className="font-body text-eyebrow text-ink-muted">
+            <h2 className="font-body text-eyebrow text-ink-muted">
               {footer.contactLabel}
-            </h3>
+            </h2>
             <ul className="mt-3 flex flex-col">
               <li>
                 <a

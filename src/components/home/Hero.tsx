@@ -6,12 +6,12 @@ import { primaryCta } from '@/content/navigation'
 import { cn } from '@/lib/cn'
 
 /*
- * Cover grade. Structure is unchanged. The photograph stays as authored; a
- * global ink mix and a start-side veil put ivory type into the same
- * relationship as the approved reference — cinematic, not a bright UI card.
+ * Cover grade stays light so the photograph keeps its warmth. Contrast for
+ * overlay type is carried by the start-side veil (desktop) and the lower-third
+ * veil (mobile), not by darkening the whole frame. A short header band keeps
+ * nav / wordmark readable on light crops.
  *
- * Desktop: type in the start (right) field. Mobile: type in the lower third,
- * room held above.
+ * Desktop: type in the start (right) field. Mobile: type in the lower third.
  */
 const coverGrade = {
   backgroundColor: 'color-mix(in oklab, var(--color-ink) 30%, transparent)',
@@ -19,27 +19,64 @@ const coverGrade = {
 
 const typeVeilDesktop = {
   backgroundImage:
-    'linear-gradient(to left, color-mix(in oklab, var(--color-ink) 46%, transparent), color-mix(in oklab, var(--color-ink) 16%, transparent) 40%, transparent 68%)',
+    'linear-gradient(to left, color-mix(in oklab, var(--color-ink) 84%, transparent), color-mix(in oklab, var(--color-ink) 70%, transparent) 36%, color-mix(in oklab, var(--color-ink) 42%, transparent) 54%, color-mix(in oklab, var(--color-ink) 12%, transparent) 72%, transparent 86%)',
 }
 
 const typeVeilMobile = {
   backgroundImage:
-    'linear-gradient(to top, color-mix(in oklab, var(--color-ink) 52%, transparent), color-mix(in oklab, var(--color-ink) 18%, transparent) 46%, transparent 78%)',
+    'linear-gradient(to top, color-mix(in oklab, var(--color-ink) 80%, transparent), color-mix(in oklab, var(--color-ink) 56%, transparent) 48%, color-mix(in oklab, var(--color-ink) 16%, transparent) 70%, transparent 86%)',
+}
+
+const headerVeil = {
+  backgroundImage:
+    'linear-gradient(to bottom, color-mix(in oklab, var(--color-ink) 52%, transparent), color-mix(in oklab, var(--color-ink) 24%, transparent) 16%, transparent 34%)',
 }
 
 const quietInverse = {
-  color: 'color-mix(in oklab, var(--color-ink-inverse) 72%, transparent)',
+  color: 'var(--color-ink-inverse)',
 }
 
 const quieterInverse = {
-  color: 'color-mix(in oklab, var(--color-ink-inverse) 58%, transparent)',
+  color: 'color-mix(in oklab, var(--color-ink-inverse) 78%, transparent)',
 }
 
 const AUTOPLAY_MS = 5500
 
+function PauseIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={16}
+      height={16}
+      fill="currentColor"
+      aria-hidden="true"
+      className="size-4"
+    >
+      <rect x="7" y="6" width="3" height="12" rx="0.5" />
+      <rect x="14" y="6" width="3" height="12" rx="0.5" />
+    </svg>
+  )
+}
+
+function PlayIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      width={16}
+      height={16}
+      fill="currentColor"
+      aria-hidden="true"
+      className="size-4"
+    >
+      <path d="M9 7.2v9.6L17 12Z" />
+    </svg>
+  )
+}
+
 export function Hero() {
-  const { secondaryCta, aside, scrollCue, slides } = hero
+  const { secondaryCta, aside, scrollCue, slides, slideshow } = hero
   const [index, setIndex] = useState(0)
+  const [paused, setPaused] = useState(false)
   const [reducedMotion, setReducedMotion] = useState(false)
   const [hidden, setHidden] = useState(false)
 
@@ -58,12 +95,14 @@ export function Hero() {
   }, [])
 
   useEffect(() => {
-    if (reducedMotion || hidden) return
+    if (reducedMotion || hidden || paused) return
     const id = window.setTimeout(() => {
       setIndex((current) => (current + 1) % slides.length)
     }, AUTOPLAY_MS)
     return () => window.clearTimeout(id)
-  }, [hidden, index, reducedMotion, slides.length])
+  }, [hidden, index, paused, reducedMotion, slides.length])
+
+  const halted = paused || reducedMotion
 
   return (
     <section className="relative isolate min-h-svh overflow-hidden text-ink-inverse">
@@ -80,7 +119,7 @@ export function Hero() {
               height={slide.height}
               decoding="async"
               fetchPriority={slideIndex === 0 ? 'high' : 'low'}
-              loading="eager"
+              loading={slideIndex === 0 ? 'eager' : 'lazy'}
               className={cn(
                 'absolute inset-0 media-cover object-[48%_42%] transition-opacity duration-(--duration-cinematic) ease-[var(--ease-out)] lg:object-[40%_46%]',
                 active ? 'opacity-100' : 'opacity-0',
@@ -104,6 +143,11 @@ export function Hero() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 lg:hidden"
         style={typeVeilMobile}
+      />
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0"
+        style={headerVeil}
       />
 
       <div className="relative flex min-h-svh flex-col justify-end lg:justify-center">
@@ -151,41 +195,61 @@ export function Hero() {
         ))}
       </ul>
 
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 hidden lg:block">
-        <Container size="wide" className="flex items-end justify-between pb-(--gutter)">
-          <ol
-            className="pointer-events-auto ltr-isolate flex items-baseline gap-5 text-eyebrow"
-            style={quieterInverse}
-          >
-            {slides.map((_, slideIndex) => {
-              const current = slideIndex === index
-              const label = String(slideIndex + 1).padStart(2, '0')
-              return (
-                <li
-                  key={label}
-                  className={
-                    current
-                      ? 'hairline-b border-ink-inverse pb-1 text-ink-inverse'
-                      : undefined
-                  }
-                >
-                  <button
-                    type="button"
-                    aria-label={`תמונה ${slideIndex + 1} מתוך ${slides.length}`}
-                    aria-current={current ? true : undefined}
-                    onClick={() => setIndex(slideIndex)}
-                    className="border-0 bg-transparent p-0 font-body text-eyebrow text-inherit"
+      <div className="pointer-events-none absolute inset-x-0 bottom-0">
+        <Container
+          size="wide"
+          className="flex items-end justify-between gap-4 pb-(--gutter)"
+        >
+          <div className="pointer-events-auto flex items-center gap-5">
+            <ol
+              className="ltr-isolate hidden items-baseline gap-5 text-eyebrow lg:flex"
+              style={quieterInverse}
+            >
+              {slides.map((_, slideIndex) => {
+                const current = slideIndex === index
+                const label = String(slideIndex + 1).padStart(2, '0')
+                return (
+                  <li
+                    key={label}
+                    className={
+                      current
+                        ? 'hairline-b border-ink-inverse pb-1 text-ink-inverse'
+                        : undefined
+                    }
                   >
-                    <span className="ltr-isolate">{label}</span>
-                  </button>
-                </li>
-              )
-            })}
-          </ol>
+                    <button
+                      type="button"
+                      aria-label={`תמונה ${slideIndex + 1} מתוך ${slides.length}`}
+                      aria-current={current ? true : undefined}
+                      onClick={() => setIndex(slideIndex)}
+                      className="border-0 bg-transparent p-0 font-body text-eyebrow text-inherit"
+                    >
+                      <span className="ltr-isolate">{label}</span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ol>
+
+            <button
+              type="button"
+              aria-pressed={halted}
+              aria-disabled={reducedMotion || undefined}
+              aria-label={halted ? slideshow.playLabel : slideshow.pauseLabel}
+              onClick={() => {
+                if (reducedMotion) return
+                setPaused((value) => !value)
+              }}
+              className="inline-flex min-h-(--tap-target-min) min-w-(--tap-target-min) items-center justify-center gap-2 rounded-sm hairline border-ink-inverse px-3 text-body-sm text-ink-inverse"
+            >
+              {halted ? <PlayIcon /> : <PauseIcon />}
+              <span>{halted ? slideshow.play : slideshow.pause}</span>
+            </button>
+          </div>
 
           <p
             aria-hidden="true"
-            className="flex items-center gap-2 text-caption"
+            className="hidden items-center gap-2 text-caption lg:flex"
             style={quieterInverse}
           >
             {scrollCue}

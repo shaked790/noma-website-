@@ -8,10 +8,17 @@ export type LeadPayload = {
   message: string
 }
 
+export type LeadSubmitResult =
+  | { delivered: true }
+  | { delivered: false; reason: 'not-configured' | 'failed' }
+
 /*
  * INTEGRATION POINT — wire Formspree, Resend, or an API route here.
- * Nothing is sent today. Callers must not treat a resolved promise as delivery.
+ * Nothing is sent today. A resolved promise is not delivery; callers must
+ * branch on `delivered`.
  */
-export async function submitLead(_payload: LeadPayload): Promise<void> {
-  return undefined
+export async function submitLead(
+  _payload: LeadPayload,
+): Promise<LeadSubmitResult> {
+  return { delivered: false, reason: 'not-configured' }
 }

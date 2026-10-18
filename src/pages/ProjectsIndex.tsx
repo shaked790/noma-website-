@@ -16,7 +16,7 @@ export function ProjectsIndex() {
             <ul className="mt-10 grid grid-cols-1 gap-12 lg:mt-14 lg:grid-cols-3 lg:gap-8">
               {projects.map((project) => (
                 <li key={project.slug} className="min-w-0">
-                  <ProjectCard project={project} />
+                  <ProjectCard project={project} headingLevel="h2" />
                 </li>
               ))}
             </ul>
